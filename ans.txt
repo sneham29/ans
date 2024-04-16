@@ -1,0 +1,30 @@
+@RestController
+@RequestMapping("/rec")
+
+
+public class RecipeController { 
+@Autowired
+private RecipeRepository reciperepo;
+@GetMapping("/get")
+public List<Recipe> getAllRecipe()
+{
+	return reciperepo.findAll();
+}
+@PostMapping("/post")
+public String postt(@RequestBody Recipe res)
+{
+	reciperepo.save(res);
+	return "hello its saved";
+	
+}
+@PutMapping("/update/{id}")
+public Recipe updatebook(@RequestBody Recipe updatebook ,@PathVariable int id) {
+	updatebook.setId(id);
+	return reciperepo.save(updatebook);
+}
+@DeleteMapping("/del/{id}")
+public String delit(@PathVariable Long id)
+{
+	reciperepo.deleteById(id);
+	return "item deleted";
+	}
