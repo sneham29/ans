@@ -1,0 +1,93 @@
+db_helper
+
+
+import java.sql.*;
+
+public class Db_Helper {
+    public static void main(String args[]) throws Exception {
+
+    }
+
+    public static void readData() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/emp";
+        String username = "root";
+        String password = "snehanikilesh";
+        String query = "select * from emp_details";
+        Connection con = DriverManager.getConnection(url, username, password);
+        Statement st = con.createStatement();
+        ResultSet rt = st.executeQuery(query);
+        while (rt.next()) {
+            System.out.println("id" + rt.getInt(1));
+            System.out.println("name" + rt.getString(2));
+            System.out.println("age" + rt.getInt(3));
+
+        }
+        con.close();
+
+    }
+
+    public static void insertData(int id, String name, int age) throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/emp";
+        String username = "root";
+        String password = "snehanikilesh";
+        String query = "insert into emp_details values(?,?,?)";
+        try (Connection con = DriverManager.getConnection(url, username, password);
+                PreparedStatement pst = con.prepareStatement(query)) {
+            pst.setInt(1, id);
+            pst.setString(2, name);
+            pst.setInt(3, age);
+            pst.executeUpdate();
+
+        }
+    }
+
+    public static void updateData(int id, String name) throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/emp";
+        String username = "root";
+        String password = "snehanikilesh";
+        String query = "update emp_details set emp_name=? where emp_id=?";
+        try (Connection con = DriverManager.getConnection(url, username, password);
+                PreparedStatement pst = con.prepareStatement(query)) {
+            pst.setString(1, name);
+            pst.setInt(2, id);
+            // pst.setInt(3,age);
+            pst.executeUpdate();
+
+        }
+    }
+
+    public static void deleteData(int id) throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/emp";
+        String username = "root";
+        String password = "snehanikilesh";
+        String query = "delete from emp_details where emp_id=?";
+        try (Connection con = DriverManager.getConnection(url, username, password);
+                PreparedStatement pst = con.prepareStatement(query)) {
+            pst.setInt(1, id);
+            // pst.setString(2,name);
+            // pst.setInt(3,age);
+            pst.executeUpdate();
+
+        }
+
+    }
+
+}
+
+
+
+app.java
+
+
+public class App {
+    public static void main(String[] args) throws Exception {
+        // System.out.println("Hello, World!");
+        Db_Helper dh = new Db_Helper();
+        dh.insertData(1, "sneha", 17);
+        dh.insertData(2, "sne", 58);
+        dh.updateData(2, "poori");
+        dh.deleteData(2);
+        dh.readData();
+
+    }
+}
